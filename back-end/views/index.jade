@@ -3,3 +3,9 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+  h1= date
+  h2#mobile
+  script(type='text/javascript').
+    var d = new Date()
+    var gmtHours = d.getTimezoneOffset()/60
+    mobile.innerHTML = gmtHours

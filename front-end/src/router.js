@@ -11,7 +11,15 @@ const routers = [
             title: '登录'
         },
         component: (resolve) => require(['./views/login/login.vue'], resolve)
+    },
+    {
+        path: '/userList',
+        meta: {
+            title: '用户列表'
+        },
+        component: (resolve) => require(['./views/main/userList.vue'], resolve)
     }
+
 
 
 ];

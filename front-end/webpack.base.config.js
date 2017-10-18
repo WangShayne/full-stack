@@ -69,5 +69,19 @@ module.exports = {
         alias: {
             'vue': 'vue/dist/vue.esm.js'
         }
+    },
+    devServer: {
+        port: 8080,
+        historyApiFallback: true,
+        stats: 'minimal',  // 输入精简信息
+        overlay: true, // 将错误显示在html之上
+        proxy: {
+            '/api': {
+                target: 'http://localhost:8888',
+                secure: false,
+                changeOrigin: true,
+                // pathRewrite: {'^/api': ''},
+            }
+        }
     }
 };
