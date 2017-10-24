@@ -2,16 +2,20 @@ import Vue from 'vue';
 import iView from 'iview';
 import VueRouter from 'vue-router';
 import Routers from './router';
+import axios from 'axios';
 import Vuex from 'vuex';
 import Util from './libs/util';
 import App from './app.vue';
 import 'iview/dist/styles/iview.css';
+import './views/base.css'
 import API from './libs/api.js'
 
 Vue.use(VueRouter);
 Vue.use(Vuex);
 
 Vue.use(iView);
+axios.defaults.baseURL = 'http://106.14.112.223:3000/api/';
+Vue.prototype.$ajax = axios
 
 Vue.prototype.API = new API();
 
