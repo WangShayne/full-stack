@@ -59,7 +59,7 @@
                 <Input v-model="signIn.loginname" placeholder="用户名"></Input>
             </FormItem>
             <FormItem prop="password">
-                <Input v-model="signIn.password" placeholder="密码"></Input>
+                <Input v-model="signIn.password" type="password" placeholder="密码"></Input>
             </FormItem>
             <FormItem>
                 <Button type="primary" @click="handleSubmit('signIn')">提交</Button>
@@ -139,7 +139,7 @@ export default {
     },
     handleSubmit(name) {
       var v = this;
-      v.$refs[name].validate(valid => {
+      v.$refs[name].validate(valid => { 
         if (valid) {
           this.registerLogin();
           //ajax 提交
@@ -175,6 +175,7 @@ export default {
         .then(res => {
           if (res != undefined) {
             if (res.data.status == true) {
+              this.handleReset('signUp');
               this.$Message.success("注册成功！");
             } else {
               this.$Message.error("注册失败！");

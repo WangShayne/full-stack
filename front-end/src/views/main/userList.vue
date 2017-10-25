@@ -15,6 +15,19 @@
             <Radio label="small">小</Radio>
         </Radio-group>
         <Table :border="showBorder" :stripe="showStripe" :show-header="showHeader" :height="fixedHeader ? 'calc(100% - 25px)' : ''" :size="tableSize" :data="allUserInfo" :columns="tableColumns3" :loading="isLoading"></Table>
+        <Modal v-model="delModal" width="360">
+          <p slot="header" style="color:#f60;text-align:center">
+              <Icon type="information-circled"></Icon>
+              <span>删除确认</span>
+          </p>
+          <div style="text-align:center;">
+              <p style="font-size:18px">是否继续删除？</p>
+          </div>
+          <div slot="footer">
+              <Button type="error" size="large" :loading="isLoading" @click="ok">确定</Button>
+              <Button size="large"  @click="cancel">取消</Button>
+          </div>
+      </Modal>
     </div>
 </template>
 <script>
@@ -22,6 +35,7 @@ export default {
   data() {
     return {
       allUserInfo: [],
+      delModal: false,
       showBorder: false,
       showStripe: false,
       showHeader: true,
@@ -29,7 +43,8 @@ export default {
       showCheckbox: false,
       fixedHeader: false,
       tableSize: "default",
-      isLoading: true
+      isLoading: true,
+      delId:''
     };
   },
   computed: {
@@ -144,19 +159,7 @@ export default {
     }
   },
   methods: {
-    ok() {
-      this.$Message.info("点击了确定");
-    },
-    cancel() {
-      this.$Message.info("点击了取消");
-    },
-    getAllUserInfo() {
-      this.$ajax
-        .get("user/getAllUserInfo")
-        .then(
-          res => ((this.isLoading = false), (this.allUserInfo = res.data.data))
-        );
-    },
+    // 点击显示用户信息框
     show(index) {
       this.$Modal.info({
         title: "用户信息",
@@ -168,9 +171,38 @@ export default {
         ].sex}`
       });
     },
+
+    // 点击删除按钮弹确认框
     remove(index) {
+      this.delModal = true;
+      this.delId = this.allUserInfo[index]._id;
+    },
+
+    //弹框确认按钮事件
+    ok() {
+      this.delModal = false;
+      this.delUserInfo(this.delId);
+    },
+
+    //弹框取消事件
+    cancel() {
+      this.delId = '';
+      this.delModal = false;
+    },
+
+    //获取所有用户信息
+    getAllUserInfo() {
       this.$ajax
-        .post("user/delUserInfo", { id: this.allUserInfo[index]._id })
+        .get("user/getAllUserInfo")
+        .then(
+          res => ((this.isLoading = false), (this.allUserInfo = res.data.data))
+        );
+    },
+
+    // 删除用户信息
+    delUserInfo(id) {
+      this.$ajax
+        .post("user/delUserInfo", { id: id })
         .then(res => {
           if (res.data.status) {
             this.$Message.success("删除成功！");
@@ -179,7 +211,8 @@ export default {
             this.$Message.error("删除失败！");
           }
         });
-    }
+    },
+
   },
   created() {
     this.getAllUserInfo();
